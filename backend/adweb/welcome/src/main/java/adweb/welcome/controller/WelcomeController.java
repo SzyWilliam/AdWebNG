@@ -1,15 +1,19 @@
 package adweb.welcome.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
+@RequestMapping("welcome")
 public class WelcomeController {
 
-    @RequestMapping(value = "welcome", method = RequestMethod.GET)
+    @RequestMapping(value = "/welcome", method = RequestMethod.GET)
     public @ResponseBody String welcome() {
         return "welcome from welcome-service";
+    }
+
+    @RequestMapping(value = "/hello/{name}", method = RequestMethod.GET)
+    public @ResponseBody String sayHello(@PathVariable("name") String name) {
+        return "Hello World, " + name;
     }
 }
