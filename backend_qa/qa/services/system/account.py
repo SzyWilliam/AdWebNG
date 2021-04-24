@@ -54,7 +54,6 @@ def user_login(request):
 
 
 def user_logout(request):
-    print(request.headers)
     token = request.META.get(TOKEN_HEADER_KEY)
     user = fetch_user_by_token(token)
     if user:
