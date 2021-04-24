@@ -8,16 +8,10 @@ import { InfiniteListComponent } from './infinite-list/infinite-list.component';
 import { ListComponent } from './list/list.component';
 import { StepperComponent } from './stepper/stepper.component';
 
-import {WelcomeComponent} from './welcome/welcome.component'
-
 const routes: Routes = [{
   path: '',
   component: LayoutComponent,
   children: [
-    {
-      path: 'welcome',
-      component: WelcomeComponent
-    },
     {
       path: 'stepper',
       component: StepperComponent,

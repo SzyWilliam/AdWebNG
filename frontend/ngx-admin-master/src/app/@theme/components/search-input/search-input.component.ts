@@ -10,7 +10,7 @@ import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular
            #input
            [class.hidden]="!isInputShown"
            (blur)="hideInput()"
-           (input)="onInput($event)">
+           (input)="onInput(this.input.textContent)">
   `,
 })
 export class SearchInputComponent {

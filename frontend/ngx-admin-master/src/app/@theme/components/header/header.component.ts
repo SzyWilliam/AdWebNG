@@ -38,7 +38,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   currentTheme = 'default';
 
-  userMenu = [ { title: 'Profile' }, { title: 'Log out' } ];
+  userMenu = [ { title: 'Log out' } ];
 
   constructor(private sidebarService: NbSidebarService,
               private menuService: NbMenuService,
@@ -90,5 +90,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   navigateHome() {
     this.menuService.navigateHome();
     return false;
+  }
+
+  userLogout() {
+    this.user = null;
+    this.userMenu = [ { title: 'Log in' }, { title: 'Register'} ];
+  }
+  userLogin() {
+    this.userMenu = [ { title: 'Logout'} ];
+  }
+  userRegister() {
+    this.userMenu = [ { title: 'Logout'} ];
   }
 }

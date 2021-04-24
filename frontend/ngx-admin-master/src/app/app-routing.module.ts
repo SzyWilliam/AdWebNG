@@ -9,8 +9,6 @@ import {
   NbResetPasswordComponent,
 } from '@nebular/auth';
 
-import {WelcomeComponent} from './qacore/welcome/welcome.component'
-
 export const routes: Routes = [
   {
     path: 'pages',
@@ -24,10 +22,6 @@ export const routes: Routes = [
       {
         path: '',
         component: NbLoginComponent,
-      },
-      {
-        path: 'welcome',
-        component: WelcomeComponent
       },
       {
         path: 'login',

@@ -1,0 +1,19 @@
+<div class="infinite-cards row">
+  <div class="col-md-12 col-lg-12 col-xxxl-12">
+    <nb-card>
+      <nb-card-header>What other people are seeing ...</nb-card-header>
+      <nb-list
+        nbInfiniteList
+        listenWindowScroll
+        [threshold]="500"
+        (bottomThreshold)="loadNext(secondCard)">
+        <nb-list-item *ngFor="let newsPost of secondCard.news">
+          <ngx-queries-post [post]="newsPost"></ngx-queries-post>
+        </nb-list-item>
+        <nb-list-item *ngFor="let _ of secondCard.placeholders">
+          <ngx-queries-post-placeholder></ngx-queries-post-placeholder>
+        </nb-list-item>
+      </nb-list>
+    </nb-card>
+  </div>
+</div>
