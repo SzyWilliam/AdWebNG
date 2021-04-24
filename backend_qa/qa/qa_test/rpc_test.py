@@ -26,5 +26,5 @@ def show_info(status_code: int, response_dict: dict):
 
 # 数据库初始化脚本
 if __name__ == '__main__':
-    status_code, response_dict = sys_register('user', 'abcdef123456')
+    status_code, response_dict = sys_login('user', 'abcdef123456')
     show_info(status_code, response_dict)

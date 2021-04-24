@@ -5,7 +5,6 @@ BST_BASE_URL = 'http://localhost:8000/qa'
 
 
 def do_request(request_type: str, url: str, params: dict = None, headers: dict = None, data: dict = None):
-    print(headers)
     response = requests.request(request_type, BST_BASE_URL + url, params=params, headers=headers, data=data)
     response_dict = None
     if response.status_code == 200:
