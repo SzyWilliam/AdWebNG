@@ -20,19 +20,19 @@ def user_register(request):
         username = parameter_dict['username']
         password = parameter_dict['password']
     except KeyError:
-        return HttpResponseBadRequest(generate_response("参数有误"))
+        return HttpResponseBadRequest(generate_response("parameter missing or invalid parameter"))
 
     try:
         validate_password(password=password)
     except ValidationError:
-        return HttpResponseBadRequest(generate_response("密码过于简单"))
+        return HttpResponseBadRequest(generate_response("password too simple"))
 
     try:
         User.objects.get(username=username)
-        return HttpResponseBadRequest(generate_response("用户名已存在"))
+        return HttpResponseBadRequest(generate_response("username already exist"))
     except User.DoesNotExist:
         User(username=username, password=password).save()
-        return generate_response("成功")
+        return generate_response("OK")
 
 
 def user_login(request):
@@ -41,16 +41,16 @@ def user_login(request):
         user = User.objects.get(username=parameter_dict['username'])
         password = parameter_dict['password']
     except KeyError:
-        return HttpResponseBadRequest(generate_response("参数有误"))
+        return HttpResponseBadRequest(generate_response("parameter missing or invalid parameter"))
     except User.DoesNotExist:
-        return HttpResponseBadRequest(generate_response("用户名不存在"))
+        return HttpResponseBadRequest(generate_response("username doesn't exist"))
 
     if password != user.password:
-        return HttpResponseForbidden(generate_response("密码错误"))
+        return HttpResponseForbidden(generate_response("wrong password"))
 
     new_token, new_expire_time = update_token(user)
     response_data = {'token': new_token, 'expire_time:': new_expire_time}
-    return generate_response("成功", response_data)
+    return generate_response("OK", response_data)
 
 
 def user_logout(request):
@@ -58,6 +58,6 @@ def user_logout(request):
     user = fetch_user_by_token(token)
     if user:
         expire_token(token)
-        return generate_response("成功")
+        return generate_response("OK")
     else:
-        return HttpResponseForbidden(generate_response("无效token"))
+        return HttpResponseForbidden(generate_response("invalid token"))
