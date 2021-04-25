@@ -16,6 +16,7 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<spring-cloud.version>2020.0.2</spring-cloud.version>
+		<docker.image.prefix>adweb</docker.image.prefix>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -46,6 +47,17 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<!-- 指定该Main Class为全局的唯一入口 -->
+					<mainClass>adweb.eurekadiscovery.EurekaDiscoveryApplication</mainClass>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal><!--可以把依赖的包都打包到生成的Jar包中-->
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
