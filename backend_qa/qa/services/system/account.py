@@ -43,7 +43,7 @@ def user_login(request):
     except KeyError:
         return HttpResponseBadRequest(generate_response("parameter missing or invalid parameter"))
     except User.DoesNotExist:
-        return HttpResponseBadRequest(generate_response("email haven't been registered"))
+        return HttpResponseForbidden(generate_response("email hasn't been registered"))
 
     if password != user.password:
         return HttpResponseForbidden(generate_response("wrong password"))
