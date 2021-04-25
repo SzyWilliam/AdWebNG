@@ -5,6 +5,8 @@ import { UserData } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import {Router} from '@angular/router';
+import {AuthService} from '../../../auth/services/auth.service';
 
 @Component({
   selector: 'ngx-header',
@@ -38,22 +40,27 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   currentTheme = 'default';
 
-  userMenu = [ { title: 'Log out' } ];
+  userMenu = [ { title: 'Log out', link: 'auth/login'} ];
 
   constructor(private sidebarService: NbSidebarService,
               private menuService: NbMenuService,
               private themeService: NbThemeService,
-              private userService: UserData,
+              private userService: AuthService,
               private layoutService: LayoutService,
-              private breakpointService: NbMediaBreakpointsService) {
+              private breakpointService: NbMediaBreakpointsService,
+              private router: Router) {
   }
 
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
 
-    this.userService.getUsers()
+    this.userService.fetchUser()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((users: any) => this.user = users.nick);
+      .subscribe((user: any) => this.user = user);
+    // console.log(this.user);
+    if (this.user == null) {
+      this.router.navigateByUrl('/auth/login').then(r => {});
+    }
 
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService.onMediaQueryChange()
@@ -90,16 +97,5 @@ export class HeaderComponent implements OnInit, OnDestroy {
   navigateHome() {
     this.menuService.navigateHome();
     return false;
-  }
-
-  userLogout() {
-    this.user = null;
-    this.userMenu = [ { title: 'Log in' }, { title: 'Register'} ];
-  }
-  userLogin() {
-    this.userMenu = [ { title: 'Logout'} ];
-  }
-  userRegister() {
-    this.userMenu = [ { title: 'Logout'} ];
   }
 }

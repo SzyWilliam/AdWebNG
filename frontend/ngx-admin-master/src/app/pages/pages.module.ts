@@ -16,6 +16,7 @@ import { QueriesPostComponent } from './recommend/infinite-list/queries-post/que
 import { QueriesPostPlaceholderComponent } from './recommend/infinite-list/queries-post-placeholder/queries-post-placeholder.component';
 import { QueryFetcher } from './recommend/recommend.service';
 import { InfiniteListComponent } from './recommend/infinite-list/infinite-list.component';
+import { AuthService } from '../auth/services/auth.service';
 
 
 @NgModule({
@@ -40,6 +41,7 @@ import { InfiniteListComponent } from './recommend/infinite-list/infinite-list.c
   ],
   providers: [
     QueryFetcher,
+    AuthService,
   ],
 })
 export class PagesModule {
