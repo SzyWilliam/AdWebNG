@@ -2,7 +2,7 @@ import time
 
 from qa.models.user import User
 
-# dictionary to store tokens and BankTellers ({str: (BankTeller, float)})
+# dictionary to store tokens and Users ({str: (User, float)})
 token_dict = {}
 # default expire time set to 10800 seconds (3 hour)
 _EXPIRE_TIME = 10800
@@ -14,7 +14,7 @@ def _get_token_by_id(token_dictionary: {str: (User, float)}, user_id: int):
 
 
 def _generate_token_string(user: User):
-    return "Token" + str(user.username)
+    return "Token" + str(user.email)
 
 
 def update_token(user: User):

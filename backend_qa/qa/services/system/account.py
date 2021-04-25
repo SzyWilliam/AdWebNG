@@ -1,5 +1,3 @@
-import json
-
 from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequest
@@ -17,7 +15,8 @@ def test(request):
 def user_register(request):
     try:
         parameter_dict = fetch_parameter_dict(request, 'POST')
-        username = parameter_dict['username']
+        email = parameter_dict['email']
+        full_name = parameter_dict['fullName']
         password = parameter_dict['password']
     except KeyError:
         return HttpResponseBadRequest(generate_response("parameter missing or invalid parameter"))
@@ -28,28 +27,29 @@ def user_register(request):
         return HttpResponseBadRequest(generate_response("password too simple"))
 
     try:
-        User.objects.get(username=username)
-        return HttpResponseBadRequest(generate_response("username already exist"))
+        User.objects.get(email=email)
+        return HttpResponseForbidden(generate_response("email already registered"))
     except User.DoesNotExist:
-        User(username=username, password=password).save()
-        return generate_response("OK")
+        user = User(email=email, full_name=full_name, password=password)
+        user.save()
+        return generate_response("OK", {"user": user.to_dict()})
 
 
 def user_login(request):
     try:
         parameter_dict = fetch_parameter_dict(request, 'POST')
-        user = User.objects.get(username=parameter_dict['username'])
+        user = User.objects.get(email=parameter_dict['email'])
         password = parameter_dict['password']
     except KeyError:
         return HttpResponseBadRequest(generate_response("parameter missing or invalid parameter"))
     except User.DoesNotExist:
-        return HttpResponseBadRequest(generate_response("username doesn't exist"))
+        return HttpResponseBadRequest(generate_response("email haven't been registered"))
 
     if password != user.password:
         return HttpResponseForbidden(generate_response("wrong password"))
 
     new_token, new_expire_time = update_token(user)
-    response_data = {'token': new_token, 'expire_time:': new_expire_time}
+    response_data = {'token': new_token, 'expire_time:': new_expire_time, "user": user.to_dict()}
     return generate_response("OK", response_data)
 
 
