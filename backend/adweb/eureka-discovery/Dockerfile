@@ -11,11 +11,11 @@ RUN cd $MY_HOME && mvn dependency:resolve
 ADD src $MY_HOME/src
 
 RUN cd $MY_HOME && mvn clean -DskipTests=true package \
-	&& mv target/*.jar .  \
+	&& mv target/*.jar ./app.jar  \
 	&& chmod 500 *.jar
 
 #暴露的端口号
 EXPOSE 9421
 
 #ENTRYPOINT 执行项目 app.jar。为了缩短 Tomcat 启动时间，添加一个系统属性指向 "/dev/urandom" 作为 Entropy Source
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","*.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","app*.jar"]
