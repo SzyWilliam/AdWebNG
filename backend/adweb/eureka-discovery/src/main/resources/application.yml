@@ -3,7 +3,7 @@ server:
 
 eureka:
   instance:
-    hostname: ${spring.cloud.client.ip-address}
+    hostname: localhost
   client:
     register-with-eureka: false
     fetch-registry: false
