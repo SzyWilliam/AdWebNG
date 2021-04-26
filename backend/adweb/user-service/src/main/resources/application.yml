@@ -1,22 +1,22 @@
 server:
   port: 9425
 
-eureka:
-  instance:
-    prefer-ip-address: true
-    hostname: ${spring.cloud.client.ip-address}
-    instance-id: ${spring.cloud.client.ip-address}:${server.port}
-    ip-address: ${IP_ADDRESS:127.0.0.1}
-  client:
-    service-url:
-      defaultZone: http://${eureka.instance.hostname}:9421/eureka
-    register-with-eureka: true
-    fetch-registry: true
+#eureka:
+#  instance:
+#    prefer-ip-address: true
+#    hostname: ${spring.cloud.client.ip-address}
+#    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+#    ip-address: ${IP_ADDRESS:127.0.0.1}
+#  client:
+#    service-url:
+#      defaultZone: http://${eureka.instance.hostname}:9421/eureka
+#    register-with-eureka: true
+#    fetch-registry: true
 
 spring:
   application:
     name: user-service
-  cloud:
-    loadbalancer:
-      retry:
-        enabled: false
+#  cloud:
+#    loadbalancer:
+#      retry:
+#        enabled: false
