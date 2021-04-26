@@ -1,5 +1,4 @@
 package adweb.userservice.controller;
-
 import adweb.userservice.controller.requests.LoginRequest;
 import adweb.userservice.controller.requests.RegisterRequest;
 import adweb.userservice.exception.EmailExistsException;
