@@ -1,7 +1,7 @@
 FROM maven:3.6.3-jdk-8
 
 # work dir
-ENV MY_HOME=/usr/src/adweb/eureka/
+ENV MY_HOME=/usr/src/adweb/welcome/
 RUN mkdir -p $MY_HOME
 WORKDIR $MY_HOME
 
