@@ -29,4 +29,14 @@ public class BackendExceptionHandler extends ResponseEntityExceptionHandler {
     String handlerInternalServerError(InternalServerError e) {
         return "internal server error";
     }
+
+    @ExceptionHandler(UserNotExistException.class)
+    String handlerUserNotExistError(InternalServerError e) {
+        return "用户不存在,请重新登录";
+    }
+
+    @ExceptionHandler(TokenVerifyFailed.class)
+    String handlerTokenVerifyFailed(InternalServerError e) {
+        return "Token 校验失败, 请重新登录";
+    }
 }

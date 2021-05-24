@@ -1,9 +1,6 @@
 package adweb.userservice.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class User {
@@ -13,6 +10,8 @@ public class User {
 
     private String username;
     private String password;
+
+    @Column(unique = true)
     private String email;
 
     public User(String username, String password, String email) {
