@@ -76,16 +76,16 @@ DATABASES = {
     #     'ENGINE': 'django.db.backends.sqlite3',
     #     'NAME': BASE_DIR / 'db.sqlite3',
     # }
-    'default':
-        {
-            'ENGINE': 'django.db.backends.mysql',  # 数据库引擎
-            'NAME': 'adweb_qa',  # 数据库名称
-            'HOST': 'adweb.cq93eoo8urwh.us-east-1.rds.amazonaws.com',  # 数据库地址，本机 ip 地址 127.0.0.1
-            # 'HOST': '127.0.0.1',
-            'PORT': 3306,  # 端口
-            'USER': 'root',  # 数据库用户名
-            'PASSWORD': 'abcdef123456',  # 数据库密码
-        }
+    # 'default':
+    #     {
+    #         'ENGINE': 'django.db.backends.mysql',  # 数据库引擎
+    #         'NAME': 'adweb_qa',  # 数据库名称
+    #         'HOST': 'adweb.cq93eoo8urwh.us-east-1.rds.amazonaws.com',  # 数据库地址，本机 ip 地址 127.0.0.1
+    #         # 'HOST': '127.0.0.1',
+    #         'PORT': 3306,  # 端口
+    #         'USER': 'root',  # 数据库用户名
+    #         'PASSWORD': 'abcdef123456',  # 数据库密码
+    #     }
 }
 
 # Password validation

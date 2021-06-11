@@ -2,18 +2,17 @@ from django.urls import path
 
 from . import views
 
-from qa.services.system import account
+from qa.services import kg
 
 urlpatterns = [
     path('', views.index, name='index'),
-    # --系统模块--
-    # 用户注册
-    path('auth/register', account.user_register, name='register'),
-    # 登录
-    path('auth/login', account.user_login, name='login'),
-    # 登出
-    path('auth/logout', account.user_logout, name='logout'),
+    # 查询
+    path('kg/query', kg.query, name='query'),
+    # 删除
+    path('kg/delete', kg.delete, name='delete'),
+    # 修改
+    path('kg/update', kg.update, name='update'),
 
-    path('test', account.test, name='test'),
+    # path('test', account.test, name='test'),
 
 ]
