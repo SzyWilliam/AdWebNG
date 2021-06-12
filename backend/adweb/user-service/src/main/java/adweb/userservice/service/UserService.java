@@ -10,6 +10,7 @@ import adweb.userservice.repository.UserRepository;
 import adweb.userservice.security.token.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import token.JWTUtils;
 
 import java.util.HashMap;
 
@@ -36,7 +37,7 @@ public class UserService {
         HashMap<String, Object> ret = new HashMap<>();
         UserDto userDto = new UserDto(user.getEmail(), user.getUsername());
         ret.put("user", userDto);
-        ret.put("token", TokenUtil.generateToken(user));
+        ret.put("token", JWTUtils.createToken(user.getEmail(), user.getUsername()));
         return ret;
     }
 
