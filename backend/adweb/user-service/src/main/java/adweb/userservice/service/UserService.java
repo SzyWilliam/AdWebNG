@@ -14,6 +14,9 @@ import token.JWTUtils;
 
 import java.util.HashMap;
 
+/**
+ * @author yanhua
+ */
 @Service
 public class UserService {
 
@@ -60,7 +63,6 @@ public class UserService {
         }
         return ret;
     }
-
 
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email);

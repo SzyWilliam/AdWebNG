@@ -16,13 +16,13 @@ import java.util.HashMap;
 
 @RestController
 @RequestMapping(path = "/auth")
-public class UserController {
+public class AuthController {
 
     private UserService userService;
 
 
     @Autowired
-    public UserController(UserService userService) {
+    public AuthController(UserService userService) {
         this.userService = userService;
 
     }
@@ -40,18 +40,5 @@ public class UserController {
                 registerRequest.getFullName());
     }
 
-
-    /**
-     * token test
-     */
-    @VerifyToken
-    @GetMapping("/username")
-    @ResponseBody
-    public String getLoggedUsername(@RequestHeader("token") String token) {
-        System.out.println(token);
-        String username = userService.getUserByEmail(TokenUtil.getEmailFromToken(token)).getUsername();
-        System.out.println(username);
-        return username;
-    }
 
 }

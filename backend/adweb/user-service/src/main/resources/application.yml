@@ -23,3 +23,9 @@ spring:
     loadbalancer:
       retry:
         enabled: false
+  datasource:
+    driver-class-name: org.h2.Driver
+    # h2 database file location
+    url: jdbc:h2:file:./db/db;
+    username: root
+    password:
