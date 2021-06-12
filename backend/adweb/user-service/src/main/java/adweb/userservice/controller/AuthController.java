@@ -6,8 +6,6 @@ import adweb.userservice.exception.EmailExistsException;
 import adweb.userservice.exception.EmailNotRegisteredException;
 import adweb.userservice.exception.InternalServerError;
 import adweb.userservice.exception.WrongPasswordException;
-import adweb.userservice.security.token.TokenUtil;
-import adweb.userservice.security.token.VerifyToken;
 import adweb.userservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
