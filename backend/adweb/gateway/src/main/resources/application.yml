@@ -31,3 +31,6 @@ spring:
           uri: lb://user-service
           predicates:
             - Path=/auth/**
+
+jwtconfig:
+  ignore-urls: /auth/register,/auth/login
