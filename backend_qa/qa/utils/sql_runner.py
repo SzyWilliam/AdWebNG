@@ -39,7 +39,7 @@ class SQLRunner:
     '''根据对应的question_type，调用相应的回复模板'''
 
     def answer_prettify(self, question_type, answers):
-        if not answers:
+        if not answers or not any(answers):
             return ''
         if question_type == 'disease_symptom':
             desc = [i['n.name'] for i in answers]
@@ -56,51 +56,58 @@ class SQLRunner:
             return '症状{0}可能染上的疾病有：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
 
         elif question_type == 'disease_cause':
-            desc = [';'.join(i['m.cause']) for i in answers]
+            desc = [i['m.cause'] for i in answers]
             if desc == [None]:
                 return ''
+            desc = [';'.join(i) if isinstance(i, list) else i for i in desc]
             subject = answers[0]['m.name']
             return '{0}可能的成因有：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
 
         elif question_type == 'disease_prevent':
-            desc = [';'.join(i['m.prevent']) for i in answers]
+            desc = [i['m.prevent'] for i in answers]
             if desc == [None]:
                 return ''
+            desc = [';'.join(i) if isinstance(i, list) else i for i in desc]
             subject = answers[0]['m.name']
             return '{0}的预防措施包括：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
 
         elif question_type == 'disease_last_time':
-            desc = [';'.join(i['m.cure_lasttime']) for i in answers]
+            desc = [i['m.cure_lasttime'] for i in answers]
             if desc == [None]:
                 return ''
+            desc = [';'.join(i) if isinstance(i, list) else i for i in desc]
             subject = answers[0]['m.name']
             return '{0}治疗可能持续的周期为：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
 
         elif question_type == 'disease_cure_way':
-            desc = [';'.join(i['m.cure_way']) for i in answers]
+            desc = [i['m.cure_way'] for i in answers]
             if desc == [None]:
                 return ''
+            desc = [';'.join(i) if isinstance(i, list) else i for i in desc]
             subject = answers[0]['m.name']
             return '{0}可以尝试如下治疗：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
 
         elif question_type == 'disease_cure_prob':
-            desc = [';'.join(i['m.cured_prob']) for i in answers]
+            desc = [i['m.cured_prob'] for i in answers]
             if desc == [None]:
                 return ''
+            desc = [';'.join(i) if isinstance(i, list) else i for i in desc]
             subject = answers[0]['m.name']
             return '{0}治愈的概率为（仅供参考）：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
 
         elif question_type == 'disease_easy_get':
-            desc = [';'.join(i['m.easy_get']) for i in answers]
+            desc = [i['m.easy_get'] for i in answers]
             if desc == [None]:
                 return ''
+            desc = [';'.join(i) if isinstance(i, list) else i for i in desc]
             subject = answers[0]['m.name']
             return '{0}的易感人群包括：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
 
         elif question_type == 'disease_desc':
-            desc = [';'.join(i['m.desc']) for i in answers]
+            desc = [i['m.desc'] for i in answers]
             if desc == [None]:
                 return ''
+            desc = [';'.join(i) if isinstance(i, list) else i for i in desc]
             subject = answers[0]['m.name']
             return '{0}：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
 

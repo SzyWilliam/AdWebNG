@@ -12,6 +12,8 @@ urlpatterns = [
     path('kg/delete', kg.delete, name='delete'),
     # 修改
     path('kg/update', kg.update, name='update'),
+    # 新增
+    path('kg/insert', kg.insert, name='insert'),
 
     # path('test', account.test, name='test'),
 

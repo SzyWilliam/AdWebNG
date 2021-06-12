@@ -304,8 +304,9 @@ class QuestionClassifier:
                 self.disease_wds.append(param1)
                 self.tree_add_word(param1)
         self.keywords_tree.make_automaton()
-        param2.append(param1)
-        for word in param2:
+        temp = list(param2)
+        temp.append(param1)
+        for word in temp:
             self.word_type_dict[word] = []
             if word in self.disease_wds:
                 self.word_type_dict[word].append('disease')

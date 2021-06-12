@@ -64,7 +64,7 @@ class QuestionInsertParser:
         if sql:
             result['sql'] = sql
 
-        return result
+        return [result]
 
     '''针对不同的问题，分开进行处理'''
 
@@ -115,67 +115,67 @@ class QuestionInsertParser:
         # 疾病症状
         elif question_type == 'disease_symptom':
             sql = [
-                "MERGE (m:Disease{{name:'{0}'}})-[r:has_symptom{{name:'症状'}}]->(n:Symptom{{name:'{1}'}}) RETURN r.name".format(
+                "MERGE (m:Disease{{name:'{0}'}}) MERGE (n:Symptom{{name:'{1}'}}) MERGE (m)-[r:has_symptom{{name:'症状'}}]->(n) RETURN r.name".format(
                     param1, i) for i in param2]
 
         # 症状对症
         elif question_type == 'symptom_disease':
             sql = [
-                "MERGE (m:Disease{{name:'{0}'}})-[r:has_symptom{{name:'症状'}}]->(n:Symptom{{name:'{1}'}}) RETURN r.name".format(
+                "MERGE (m:Disease{{name:'{0}'}}) MERGE (n:Symptom{{name:'{1}'}}) MERGE (m)-[r:has_symptom{{name:'症状'}}]->(n) RETURN r.name".format(
                     i, param1) for i in param2]
 
         # 并发症
         elif question_type == 'disease_accompany':
             sql = [
-                "MERGE (m:Disease{{name:'{0}'}})-[r:accompany_with{{name:'并发症'}}]->(n:Disease{{name:'{1}'}}) RETURN r.name".format(
+                "MERGE (m:Disease{{name:'{0}'}}) MERGE (n:Disease{{name:'{1}'}}) MERGE (m)-[r:accompany_with{{name:'并发症'}}]->(n) RETURN r.name".format(
                     param1, i) for i in param2]
 
         # 忌口
         elif question_type == 'disease_not_food':
             sql = [
-                "MERGE (m:Disease{{name:'{0}'}})-[r:no_eat{{name:'忌吃'}}]->(n:Food{{name:'{1}'}}) RETURN r.name".format(
+                "MERGE (m:Disease{{name:'{0}'}}) MERGE (n:Food{{name:'{1}'}}) MERGE (m)-[r:no_eat{{name:'忌吃'}}]->(n) RETURN r.name".format(
                     param1, i) for i in param2]
 
         # 宜食
         elif question_type == 'disease_do_food':
             sql = [
-                "MERGE (m:Disease{{name:'{0}'}})-[r:do_eat{{name:'宜吃'}}]->(n:Food{{name:'{1}'}}) RETURN r.name".format(
+                "MERGE (m:Disease{{name:'{0}'}}) MERGE (n:Food{{name:'{1}'}}) MERGE (m)-[r:do_eat{{name:'宜吃'}}]->(n) RETURN r.name".format(
                     param1, i) for i in param2]
 
         # 忌口对症
         elif question_type == 'food_not_disease':
             sql = [
-                "MERGE (m:Disease{{name:'{0}'}})-[r:no_eat{{name:'忌吃'}}]->(n:Food{{name:'{1}'}}) RETURN r.name".format(
+                "MERGE (m:Disease{{name:'{0}'}}) MERGE (n:Food{{name:'{1}'}}) MERGE (m)-[r:no_eat{{name:'忌吃'}}]->(n) RETURN r.name".format(
                     i, param1) for i in param2]
 
         # 宜食对症
         elif question_type == 'food_do_disease':
             sql = [
-                "MERGE (m:Disease{{name:'{0}'}})-[r:no_eat{{name:'宜吃'}}]->(n:Food{{name:'{1}'}}) RETURN r.name".format(
+                "MERGE (m:Disease{{name:'{0}'}}) MERGE (n:Food{{name:'{1}'}}) MERGE (m)-[r:no_eat{{name:'宜吃'}}]->(n) RETURN r.name".format(
                     i, param1) for i in param2]
 
         # 治疗药物
         elif question_type == 'disease_drug':
             sql = [
-                "MERGE (m:Disease{{name:'{0}'}})-[r:common_drug{{name:'常用药品'}}]->(n:Drug{{name:'{1}'}}) RETURN r.name".format(
+                "MERGE (m:Disease{{name:'{0}'}}) MERGE (n:Drug{{name:'{1}'}}) MERGE (m)-[r:common_drug{{name:'常用药品'}}]->(n) RETURN r.name".format(
                     param1, i) for i in param2]
 
         # 药物对症
         elif question_type == 'drug_disease':
             sql = [
-                "MERGE (m:Disease{{name:'{0}'}})-[r:common_drug{{name:'常用药品'}}]->(n:Drug{{name:'{1}'}}) RETURN r.name".format(
+                "MERGE (m:Disease{{name:'{0}'}}) MERGE (n:Drug{{name:'{1}'}}) MERGE (m)-[r:common_drug{{name:'常用药品'}}]->(n) RETURN r.name".format(
                     i, param1) for i in param2]
 
         # 疾病检查
         elif question_type == 'disease_check':
             sql = [
-                "MERGE (m:Disease{{name:'{0}'}})-[r:need_check{{name:'诊断检查'}}]->(n:Check{{name:'{1}'}}) RETURN r.name".format(
+                "MERGE (m:Disease{{name:'{0}'}}) MERGE (n:Check{{name:'{1}'}}) MERGE (m)-[r:need_check{{name:'诊断检查'}}]->(n) RETURN r.name".format(
                     param1, i) for i in param2]
 
         # 检查对症
         elif question_type == 'check_disease':
             sql = [
-                "MERGE (m:Disease{{name:'{0}'}})-[r:need_check{{name:'诊断检查'}}]->(n:Symptom{{name:'{1}'}}) RETURN r.name".format(
+                "MERGE (m:Disease{{name:'{0}'}}) MERGE (n:Check{{name:'{1}'}}) MERGE (m)-[r:need_check{{name:'诊断检查'}}]->(n) RETURN r.name".format(
                     i, param1) for i in param2]
 
         return sql

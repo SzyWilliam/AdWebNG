@@ -1,10 +1,3 @@
-class A:
-    def __init__(self):
-        self.abc=["1"]
-    def a(self):
-        ab=self.abc
-        ab.append("2")
-        print(self.abc)
-
-aaa=A()
-aaa.a()
+a=[["1","2","3"], "456"]
+a=[";".join(i) if isinstance(i,list) else i for i in a]
+print(a)
