@@ -21,8 +21,8 @@ public class QuestionService {
 
 
     public void putQuestion(Question question) {
-        Question oldQ = questionRepository.findByTypeAndpAndParam1AndDescription(question.getType(),
-                question.getParam1(), question.getDescription());
+        Question oldQ = questionRepository.findByQtypeAndParam1AndDescription(question.getQtype(),
+                question.getParam1(), question.getDescription()).get(0);
         if (oldQ != null) {
             oldQ.setHot(oldQ.getHot() + 1);
             questionRepository.save(oldQ);

@@ -6,9 +6,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface QuestionRepository extends CrudRepository<Question, Long> {
-    Question findByTypeAndpAndParam1AndDescription(String type, String param1, String des);
+
+    List<Question> findByQtypeAndParam1AndDescription(String type, String param1, String des);
 
     Page<Question> find(Pageable pageable);
 }
