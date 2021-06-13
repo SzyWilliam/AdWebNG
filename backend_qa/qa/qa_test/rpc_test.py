@@ -22,8 +22,8 @@ def kg_update(question: str, answers: list):
     return do_post_request('/kg/update', data={'query': question, 'answer': answers})
 
 
-def kg_insert(question_type: str, param1: str, param2: list):
-    return do_post_request('/kg/insert', data={'type': question_type, 'param1': param1, "param2": param2})
+def kg_new(question_type: str, param1: str, param2: list):
+    return do_post_request('/kg/new', data={'type': question_type, 'param1': param1, "param2": param2})
 
 
 def show_info(status_code: int, response_dict: dict):
@@ -33,7 +33,7 @@ def show_info(status_code: int, response_dict: dict):
 if __name__ == '__main__':
     status_code, response_dict = kg_query("ccc的多久治好")
     show_info(status_code, response_dict)
-    status_code, response_dict = kg_insert("disease_last_time", "ccc", ["1个月", "2个月"])
+    status_code, response_dict = kg_new("disease_last_time", "ccc", ["1个月", "2个月"])
     show_info(status_code, response_dict)
     status_code, response_dict = kg_query("ccc的多久治好")
     show_info(status_code, response_dict)

@@ -39,7 +39,7 @@ def update(request):
     try:
         param_dict = fetch_parameter_dict(request, "POST")
         question = param_dict["query"]
-        answers = param_dict.getlist("answer")
+        answers = param_dict["answer"]
     except KeyError:
         return HttpResponseBadRequest(generate_response("parameter missing or invalid parameter"))
 
@@ -57,7 +57,7 @@ def insert(request):
         param_dict = fetch_parameter_dict(request, "POST")
         question_type = param_dict["type"]
         param1 = param_dict["param1"]
-        param2 = param_dict.getlist("param2")
+        param2 = param_dict["param2"]
     except KeyError:
         return HttpResponseBadRequest(generate_response("parameter missing or invalid parameter"))
 

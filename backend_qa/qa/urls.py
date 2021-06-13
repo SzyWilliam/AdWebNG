@@ -13,7 +13,7 @@ urlpatterns = [
     # 修改
     path('kg/update', kg.update, name='update'),
     # 新增
-    path('kg/insert', kg.insert, name='insert'),
+    path('kg/new', kg.insert, name='new'),
 
     # path('test', account.test, name='test'),
 
