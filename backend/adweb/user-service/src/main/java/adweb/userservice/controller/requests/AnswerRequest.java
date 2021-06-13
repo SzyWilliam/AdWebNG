@@ -4,7 +4,7 @@ package adweb.userservice.controller.requests;
  * @author yanhua
  */
 public class AnswerRequest {
-    private String qid;
+    private long qid;
 
     private String email;
 
@@ -16,7 +16,7 @@ public class AnswerRequest {
 
     public long getQid() { return qid;}
 
-    public void setQid(String qid) { this.qid = qid;}
+    public void setQid(long qid) { this.qid = qid;}
 
     public String getAnswer() { return answer;}
 

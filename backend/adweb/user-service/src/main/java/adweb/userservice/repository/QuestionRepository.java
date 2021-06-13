@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface QuestionRepository extends CrudRepository<Question, Long> {
-    Question findByTypeAndpAndParam1AndDescription(String type, String param1, String des);
+    Question findByTypeAndParam1AndDescription(String type, String param1, String des);
 
     Page<Question> find(Pageable pageable);
 }
