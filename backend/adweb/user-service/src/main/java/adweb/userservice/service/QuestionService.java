@@ -33,8 +33,6 @@ public class QuestionService {
     }
 
     public List<Question> getPopularQuestions(int topk) {
-        Sort sort = Sort.by(Sort.Direction.DESC, "hot");
-        Pageable pageable = PageRequest.of(0, topk, sort);
-        return questionRepository.find(pageable).toList();
+        return questionRepository.findTopK(topk);
     }
 }
