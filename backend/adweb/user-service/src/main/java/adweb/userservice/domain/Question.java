@@ -1,7 +1,5 @@
 package adweb.userservice.domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -14,8 +12,7 @@ public class Question {
 
     private String description;
 
-    @JsonProperty("type")
-    private String qtype;
+    private String type;
 
     private String param1;
 
@@ -42,9 +39,9 @@ public class Question {
 
     public void setDescription(String description) { this.description = description;}
 
-    public String getQtype() { return qtype;}
+    public String getType() { return type;}
 
-    public void setQtype(String type) { this.qtype = type;}
+    public void setType(String type) { this.type = type;}
 
     public String getParam1() { return param1;}
 
