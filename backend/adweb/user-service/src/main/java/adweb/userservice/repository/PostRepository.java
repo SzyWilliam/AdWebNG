@@ -1,7 +1,6 @@
 package adweb.userservice.repository;
 
 import adweb.userservice.domain.Post;
-import javafx.geometry.Pos;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
