@@ -60,9 +60,10 @@ public class KGMiddleController {
 
         JSONObject result = JSONObject.parseObject((String) response.getBody());
         Question question = new Question();
-        question.setType(result.getString("type"));
-        question.setParam1(result.getString("param1"));
-        question.setDescription(result.getString("description"));
+        System.out.println(result);
+        question.setType(result.getJSONObject("data").getString("type"));
+        question.setParam1(result.getJSONObject("data").getString("param1"));
+        question.setDescription(result.getJSONObject("data").getString("description"));
         questionService.putQuestion(question);
         return result;
     }
