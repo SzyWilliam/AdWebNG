@@ -31,7 +31,7 @@ public class Post {
      * the question id for an answer
      * for the type of 'question', this is 'null'
      */
-    private String qid;
+    private long qid;
 
 
     private Date time;
@@ -61,11 +61,11 @@ public class Post {
         this.type = type;
     }
 
-    public String getQid() {
+    public long getQid() {
         return qid;
     }
 
-    public void setQid(String qid) {
+    public void setQid(long qid) {
         this.qid = qid;
     }
 

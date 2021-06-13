@@ -1,7 +1,5 @@
 package adweb.userservice.controller.requests;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * @author yanhua
  */
@@ -16,7 +14,7 @@ public class AnswerRequest {
 
     public void setEmail(String email) { this.email = email;}
 
-    public String getQid() { return qid;}
+    public long getQid() { return qid;}
 
     public void setQid(String qid) { this.qid = qid;}
 

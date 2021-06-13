@@ -28,6 +28,10 @@ public class ActionService {
         return actionRepository.findByEmail(email, pageable).toList();
     }
 
+    public void saveAction(Action action){
+        actionRepository.save(action);
+    }
+
 
 }
 

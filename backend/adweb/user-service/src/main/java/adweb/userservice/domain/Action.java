@@ -18,6 +18,9 @@ public class Action {
 
     private String query;
 
+    /**
+     * 足迹类型：增删改查[ADD, DELETE, GET, MODIFY]
+     */
     private String type;
 
     private Date time;
