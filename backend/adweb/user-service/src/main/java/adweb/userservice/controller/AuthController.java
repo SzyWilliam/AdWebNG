@@ -16,8 +16,7 @@ import java.util.HashMap;
 @RequestMapping(path = "/auth")
 public class AuthController {
 
-    private UserService userService;
-
+    private final UserService userService;
 
     @Autowired
     public AuthController(UserService userService) {
@@ -25,13 +24,13 @@ public class AuthController {
 
     }
 
-    @RequestMapping(path = "/login", method = RequestMethod.POST)
+    @PostMapping("/login")
     @ResponseBody
     public HashMap<String, Object> userLogin(@RequestBody LoginRequest loginRequest) throws EmailNotRegisteredException, WrongPasswordException {
         return userService.login(loginRequest.getEmail(), loginRequest.getPassword());
     }
 
-    @RequestMapping(path = "/register", method = RequestMethod.POST)
+    @PostMapping("/register")
     @ResponseBody
     public HashMap<String, Object> useRegister(@RequestBody RegisterRequest registerRequest) throws InternalServerError, EmailExistsException {
         return userService.register(registerRequest.getEmail(), registerRequest.getPassword(),
