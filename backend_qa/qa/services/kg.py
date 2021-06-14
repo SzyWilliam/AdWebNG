@@ -17,7 +17,7 @@ def query(request):
     if not answers:
         return generate_response("OK", {"result": "error", "answer": []})
     else:
-        return generate_response("OK", {"result": "ok", "answer": answers})
+        return generate_response("OK", answers)
 
 
 def delete(request):
