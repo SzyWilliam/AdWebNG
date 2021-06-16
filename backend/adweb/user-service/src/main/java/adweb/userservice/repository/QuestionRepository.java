@@ -11,6 +11,6 @@ import java.util.List;
 public interface QuestionRepository extends CrudRepository<Question, Long> {
     Question findByTypeAndParam1AndDescription(String type, String param1, String des);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM Question ORDER BY hot LIMIT ?1")
+    @Query(nativeQuery = true, value = "SELECT * FROM Question ORDER BY hot desc LIMIT ?1")
     List<Question> findTopK(int topk);
 }

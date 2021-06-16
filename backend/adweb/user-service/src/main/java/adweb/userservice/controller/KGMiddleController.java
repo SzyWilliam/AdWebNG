@@ -31,7 +31,7 @@ public class KGMiddleController {
     private final QuestionService questionService;
 
     private static final RestTemplate restTemplate = new RestTemplate();
-    private static final String basicUrl = "http://127.0.0.1:8000";
+    private static final String basicUrl = "http://106.14.14.166:8000";
 
     @Autowired
     public KGMiddleController(ActionService actionService, QuestionService questionService) {
@@ -64,6 +64,7 @@ public class KGMiddleController {
         question.setType(result.getJSONObject("data").getString("type"));
         question.setParam1(result.getJSONObject("data").getString("param1"));
         question.setDescription(result.getJSONObject("data").getString("description"));
+        System.out.println(question.getType() + " " + question.getParam1() + "  "  + question.getDescription());
         questionService.putQuestion(question);
         return result;
     }
@@ -96,7 +97,7 @@ public class KGMiddleController {
 
     @RequestMapping(path = "/delete", method = RequestMethod.POST)
     public JSONObject deleteQuery(@RequestBody DeleteRequest request, @RequestHeader("token") String token) {
-        String url = "/qa/kg/delete";
+        String url = basicUrl + "/qa/kg/delete";
         ResponseEntity<?> response = Exchange(url, request, HttpMethod.POST);
         Action action = new Action();
         action.setEmail(JWTUtils.getEmailFromToken(token));

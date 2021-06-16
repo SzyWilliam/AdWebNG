@@ -4,17 +4,6 @@ server:
 token:
   expire: 3600000
 
-eureka:
-  instance:
-    prefer-ip-address: true
-    hostname: ${spring.cloud.client.ip-address}
-    instance-id: ${spring.cloud.client.ip-address}:${server.port}
-    ip-address: ${IP_ADDRESS:127.0.0.1}
-  client:
-    service-url:
-      defaultZone: http://${eureka.instance.hostname}:9421/eureka
-    register-with-eureka: true
-    fetch-registry: true
 
 spring:
   application:
