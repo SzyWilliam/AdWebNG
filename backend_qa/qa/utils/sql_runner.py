@@ -46,14 +46,16 @@ class SQLRunner:
             if desc == [None]:
                 return ''
             subject = answers[0]['m.name']
-            return '{0}的症状包括：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
+            return ['{0}的症状包括：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit])),
+                    '{0}的症状是什么？'.format(subject), subject]
 
         elif question_type == 'symptom_disease':
             desc = [i['m.name'] for i in answers]
             if desc == [None]:
                 return ''
             subject = answers[0]['n.name']
-            return '症状{0}可能染上的疾病有：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
+            return ['症状{0}可能染上的疾病有：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit])),
+                    '症状为{0}的病有哪些？'.format(subject), subject]
 
         elif question_type == 'disease_cause':
             desc = [i['m.cause'] for i in answers]
@@ -61,7 +63,8 @@ class SQLRunner:
                 return ''
             desc = [';'.join(i) if isinstance(i, list) else i for i in desc]
             subject = answers[0]['m.name']
-            return '{0}可能的成因有：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
+            return ['{0}可能的成因有：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit])),
+                    '{0}的病因可能有哪些？'.format(subject), subject]
 
         elif question_type == 'disease_prevent':
             desc = [i['m.prevent'] for i in answers]
@@ -69,7 +72,8 @@ class SQLRunner:
                 return ''
             desc = [';'.join(i) if isinstance(i, list) else i for i in desc]
             subject = answers[0]['m.name']
-            return '{0}的预防措施包括：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
+            return ['{0}的预防措施包括：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit])),
+                    '{0}的预防措施有哪些？'.format(subject), subject]
 
         elif question_type == 'disease_last_time':
             desc = [i['m.cure_lasttime'] for i in answers]
@@ -77,7 +81,8 @@ class SQLRunner:
                 return ''
             desc = [';'.join(i) if isinstance(i, list) else i for i in desc]
             subject = answers[0]['m.name']
-            return '{0}治疗可能持续的周期为：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
+            return ['{0}治疗可能持续的周期为：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit])),
+                    '{0}需要治疗多长时间？'.format(subject), subject]
 
         elif question_type == 'disease_cure_way':
             desc = [i['m.cure_way'] for i in answers]
@@ -85,7 +90,8 @@ class SQLRunner:
                 return ''
             desc = [';'.join(i) if isinstance(i, list) else i for i in desc]
             subject = answers[0]['m.name']
-            return '{0}可以尝试如下治疗：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
+            return ['{0}可以尝试如下治疗：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit])),
+                    "{0}的治疗方法有哪些？".format(subject), subject]
 
         elif question_type == 'disease_cure_prob':
             desc = [i['m.cured_prob'] for i in answers]
@@ -93,7 +99,8 @@ class SQLRunner:
                 return ''
             desc = [';'.join(i) if isinstance(i, list) else i for i in desc]
             subject = answers[0]['m.name']
-            return '{0}治愈的概率为（仅供参考）：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
+            return ['{0}治愈的概率为（仅供参考）：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit])),
+                    "{0}的治愈概率大概有多少？".format(subject), subject]
 
         elif question_type == 'disease_easy_get':
             desc = [i['m.easy_get'] for i in answers]
@@ -101,7 +108,8 @@ class SQLRunner:
                 return ''
             desc = [';'.join(i) if isinstance(i, list) else i for i in desc]
             subject = answers[0]['m.name']
-            return '{0}的易感人群包括：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
+            return ['{0}的易感人群包括：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit])),
+                    "{0}的易感人群有哪些？".format(subject), subject]
 
         elif question_type == 'disease_desc':
             desc = [i['m.desc'] for i in answers]
@@ -109,7 +117,8 @@ class SQLRunner:
                 return ''
             desc = [';'.join(i) if isinstance(i, list) else i for i in desc]
             subject = answers[0]['m.name']
-            return '{0}：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
+            return ['{0}：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit])), "{0}的简介？".format(subject),
+                    subject]
 
         elif question_type == 'disease_accompany':
             desc1 = [i['n.name'] for i in answers]
@@ -118,14 +127,16 @@ class SQLRunner:
             desc = [i for i in desc1 + desc2 if i != subject]
             if desc == [None]:
                 return ''
-            return '{0}的并发症包括：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
+            return ['{0}的并发症包括：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit])),
+                    "{0}的并发症有哪些？".format(subject), subject]
 
         elif question_type == 'disease_not_food':
             desc = [i['n.name'] for i in answers]
             if desc == [None]:
                 return ''
             subject = answers[0]['m.name']
-            return '{0}忌食的食物包括：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
+            return ['{0}忌食的食物包括：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit])),
+                    "得{0}时忌吃的食物有哪些？".format(subject), subject]
 
         elif question_type == 'disease_do_food':
             do_desc = [i['n.name'] for i in answers if i['r.name'] == '宜吃']
@@ -134,54 +145,63 @@ class SQLRunner:
                 return ''
             subject = answers[0]['m.name']
             if recommend_desc == [None]:
-                return '{0}宜食的食物包括：{1}'.format(subject, ';'.join(list(set(do_desc))[:self.num_limit]))
+                return ['{0}宜食的食物包括：{1}'.format(subject, ';'.join(list(set(do_desc))[:self.num_limit])),
+                        "得{0}时宜吃的食物有哪些？".format(subject), subject]
             elif do_desc == [None]:
-                return '{0}推荐食谱包括：{1}'.format(subject, ';'.join(list(set(recommend_desc))[:self.num_limit]))
+                return ['{0}推荐食谱包括：{1}'.format(subject, ';'.join(list(set(recommend_desc))[:self.num_limit])),
+                        "得{0}时宜吃的食物有哪些？".format(subject), subject]
             else:
-                return '{0}宜食的食物包括有：{1}\n推荐食谱包括有：{2}'.format(subject, ';'.join(list(set(do_desc))[:self.num_limit]),
-                                                             ';'.join(list(set(recommend_desc))[:self.num_limit]))
+                return ['{0}宜食的食物包括有：{1}\n推荐食谱包括有：{2}'.format(subject, ';'.join(list(set(do_desc))[:self.num_limit]),
+                                                              ';'.join(list(set(recommend_desc))[:self.num_limit])),
+                        "得{0}时宜吃的食物有哪些？".format(subject), subject]
 
         elif question_type == 'food_not_disease':
             desc = [i['m.name'] for i in answers]
             if desc == [None]:
                 return ''
             subject = answers[0]['n.name']
-            return '患有{0}的人最好不要吃{1}'.format('；'.join(list(set(desc))[:self.num_limit]), subject)
+            return ['患有{0}的人最好不要吃{1}'.format('；'.join(list(set(desc))[:self.num_limit]), subject),
+                    "生哪些病时不能吃{0}？".format(subject), subject]
 
         elif question_type == 'food_do_disease':
             desc = [i['m.name'] for i in answers]
             if desc == [None]:
                 return ''
             subject = answers[0]['n.name']
-            return '患有{0}的人建议多试试{1}'.format('；'.join(list(set(desc))[:self.num_limit]), subject)
+            return ['患有{0}的人建议多试试{1}'.format('；'.join(list(set(desc))[:self.num_limit]), subject),
+                    "生哪些病时建议吃{0}？".format(subject), subject]
 
         elif question_type == 'disease_drug':
             desc = [i['n.name'] for i in answers]
             if desc == [None]:
                 return ''
             subject = answers[0]['m.name']
-            return '{0}通常的使用的药品包括：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
+            return ['{0}通常的使用的药品包括：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit])),
+                    "{0}常用的治疗药物有哪些？".format(subject), subject]
 
         elif question_type == 'drug_disease':
             desc = [i['m.name'] for i in answers]
             if desc == [None]:
                 return ''
             subject = answers[0]['n.name']
-            return '{0}主治的疾病有{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
+            return ['{0}主治的疾病有{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit])),
+                    "{0}这种药主要用来治什么病？".format(subject), subject]
 
         elif question_type == 'disease_check':
             desc = [i['n.name'] for i in answers]
             if desc == [None]:
                 return ''
             subject = answers[0]['m.name']
-            return '{0}通常可以通过以下方式检查出来：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
+            return ['{0}通常可以通过以下方式检查出来：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit])),
+                    "{0}主要的检查方式有哪些？".format(subject), subject]
 
         elif question_type == 'check_disease':
             desc = [i['m.name'] for i in answers]
             if desc == [None]:
                 return ''
             subject = answers[0]['n.name']
-            return '通常可以通过{0}检查出来的疾病有{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit]))
+            return ['通常可以通过{0}检查出来的疾病有{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit])),
+                    "{0}可以检查的疾病有哪些？".format(subject), subject]
 
         return ""
 

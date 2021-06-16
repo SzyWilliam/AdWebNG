@@ -39,7 +39,17 @@ class KGUtil:
         if not classify_result:
             return None
         parser_result = self.query_parser.query_parse(classify_result)
-        return self.runner.run_sql(parser_result, "query")
+        answer = self.runner.run_sql(parser_result, "query")
+        if not answer:
+            return None
+        else:
+            result_dict = {"result": "ok", "type": classify_result["question_types"][0], "param1": answer[0][2],
+                           "description": answer[0][1]}
+            answers = []
+            for a in answer:
+                answers.append(a[0])
+            result_dict["answer"] = answers
+            return result_dict
 
     def kg_delete(self, question):
         classify_result = self.classifier.classify(question)
