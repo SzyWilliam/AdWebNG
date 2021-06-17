@@ -111,8 +111,7 @@ public class KGMiddleController {
 
     @GetMapping("/popular")
     public List<Question> getPopularQuestions(@RequestParam int pageSize, @RequestParam int pageNum) {
-        int topk = pageSize * pageNum;
-        return questionService.getPopularQuestions(topk);
+        return questionService.getPopularQuestions(pageSize * pageNum);
     }
 
 }

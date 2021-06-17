@@ -61,7 +61,7 @@ public class UserActionController {
 
     @RequestMapping(path = "/allquestions", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> getAllQuestions(int topk) {
+    public Map<String, Object> getAllQuestions(@RequestParam int topk) {
         Map<String, Object> rs = new HashMap<>();
         List<Post> questions = postService.getQuestions(topk);
         rs.put("questions", questions);
