@@ -20,6 +20,7 @@ import token.JWTUtils;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -109,11 +110,9 @@ public class KGMiddleController {
     }
 
     @GetMapping("/popular")
-    public Map<String, Object> getPopularQuestions(@RequestParam int topk) {
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("result", questionService.getPopularQuestions(topk));
-        return result;
+    public List<Question> getPopularQuestions(@RequestParam int pageSize, @RequestParam int pageNum) {
+        int topk = pageSize * pageNum;
+        return questionService.getPopularQuestions(topk);
     }
 
 }
