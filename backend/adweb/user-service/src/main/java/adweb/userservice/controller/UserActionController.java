@@ -53,6 +53,7 @@ public class UserActionController {
         post.setType("answer");
         post.setEmail(request.getEmail());
         post.setQid(request.getQid());
+        postService.createPost(post);
         Map<String, String> rs = new HashMap<>();
         rs.put("result", "ok");
         return rs;
