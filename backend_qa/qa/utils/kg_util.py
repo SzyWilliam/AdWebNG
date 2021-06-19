@@ -51,6 +51,18 @@ class KGUtil:
             result_dict["answer"] = answers
             return result_dict
 
+    def kg_query_relation(self, question):
+        classify_result = self.classifier.classify(question)
+        if not classify_result:
+            return None
+        answer = self.runner.run_sql(list(classify_result['args'].keys())[0], "query_relation")
+        if not answer:
+            return None
+        result = []
+        for a in answer:
+            result.append({'relation': a['r.name'], 'content': a['n.name']})
+        return result
+
     def kg_delete(self, question):
         classify_result = self.classifier.classify(question)
         if not classify_result:
