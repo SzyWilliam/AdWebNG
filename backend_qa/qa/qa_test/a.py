@@ -1,3 +1,5 @@
-a=[["1","2","3"], "456"]
-a=[";".join(i) if isinstance(i,list) else i for i in a]
-print(a)
+from py2neo import Graph, Node
+
+g = Graph("http://44.193.100.172:7474", auth=("neo4j", "000720"))
+
+g.run("create (m:Disease{name:'aaa'})RETURN m")

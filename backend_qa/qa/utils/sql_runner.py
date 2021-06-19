@@ -24,6 +24,10 @@ class SQLRunner:
                 if final_answer:
                     final_answers.append(final_answer)
             return final_answers
+        elif sql_type == "query_relation":
+            sql = "MATCH (m{{name:'{0}'}})-[r]->(n) RETURN r.name, n.name".format(parser_result)
+            result = self.g.run(sql).data()
+            return result
         else:
             t = False
             for query in parser_result:
