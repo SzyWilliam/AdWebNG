@@ -17,12 +17,10 @@ https://github.com/SzyWilliam/AdWebNG.git
 项目的前端直接访问的Url如下(第一次加载可能需要二十分钟，下载120MB的材料)
 
 ```http
-TODO
+http://www.inscourse.top:8999/auth/login
 ```
 
-### 项目的页面使用说明（SZY）
 
-TODO
 
 ### 项目的架构（SZY）
 
@@ -386,6 +384,8 @@ springcloud后端的文件目录如下
 
 ## 附加功能的实现
 
+### 知识图谱可视化的功能实现
+
 
 
 
@@ -416,7 +416,7 @@ $ docker run -d --net=host user-service
 
 
 
-### Django部署配置（YHT）
+### Django和Neo4j部署配置（YHT）
 
 
 
