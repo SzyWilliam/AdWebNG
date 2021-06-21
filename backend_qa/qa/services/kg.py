@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequest
+from django.http import HttpResponseBadRequest
 
 from qa.utils.kg_util import KGUtil
 from qa.utils.request_processor import fetch_parameter_dict

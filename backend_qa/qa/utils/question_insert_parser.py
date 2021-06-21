@@ -151,7 +151,7 @@ class QuestionInsertParser:
         # 宜食对症
         elif question_type == 'food_do_disease':
             sql = [
-                "MERGE (m:Disease{{name:'{0}'}}) MERGE (n:Food{{name:'{1}'}}) MERGE (m)-[r:no_eat{{name:'宜吃'}}]->(n) RETURN r.name".format(
+                "MERGE (m:Disease{{name:'{0}'}}) MERGE (n:Food{{name:'{1}'}}) MERGE (m)-[r:do_eat{{name:'宜吃'}}]->(n) RETURN r.name".format(
                     i, param1) for i in param2]
 
         # 治疗药物

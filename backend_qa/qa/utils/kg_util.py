@@ -39,8 +39,21 @@ class KGUtil:
         if not classify_result:
             return None
         parser_result = self.query_parser.query_parse(classify_result)
-        answer = self.runner.run_sql(parser_result, "query")
+        answer = self.runner.run_sql(parser_result, "query_small")
         if not answer:
+            if len(classify_result["question_types"]) != 1:
+                return None
+            param2 = self.runner.run_sql(parser_result, "query_big")
+            print(param2)
+            if not param2:
+                return None
+            question_type = classify_result["question_types"][0]
+            param1 = list(classify_result['args'].keys())[0]
+            print(param1)
+            self.classifier.update_keywords(question_type, param1, param2)
+            new_parser_result = self.insert_parser.insert_parse(question_type, param1, param2)
+            print(new_parser_result)
+            self.runner.run_sql(new_parser_result, "insert")
             return None
         else:
             result_dict = {"result": "ok", "type": classify_result["question_types"][0], "param1": answer[0][2],
@@ -97,3 +110,10 @@ class KGUtil:
         self.classifier.update_keywords(question_type, param1, param2)
         parser_result = self.insert_parser.insert_parse(question_type, param1, param2)
         return self.runner.run_sql(parser_result, "insert")
+
+
+if __name__ == '__main__':
+    kgutil = KGUtil()
+    classify_result = kgutil.classifier.classify("心脏病的症状")
+    parser_result = kgutil.query_parser.query_parse(classify_result)
+    answer = kgutil.runner.run_sql(parser_result, "query_big")
