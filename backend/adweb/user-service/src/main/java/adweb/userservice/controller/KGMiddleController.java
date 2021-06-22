@@ -74,13 +74,14 @@ public class KGMiddleController {
     public JSONObject newQuery(@RequestBody NewQueryRequest request, @RequestHeader("token") String token) {
         String url = basicUrl + "/qa/kg/new";
         ResponseEntity<?> response = Exchange(url, request, HttpMethod.POST);
+        JSONObject result = JSONObject.parseObject((String) response.getBody());
         Action action = new Action();
         action.setEmail(JWTUtils.getEmailFromToken(token));
-        action.setQuery(JSON.toJSONString(request));
+        action.setQuery(request.getParam1());
         action.setType("ADD");
         action.setTime(new Date());
         actionService.saveAction(action);
-        return JSONObject.parseObject((String) response.getBody());
+        return result;
     }
 
     @RequestMapping(path = "/update", method = RequestMethod.POST)
@@ -89,7 +90,7 @@ public class KGMiddleController {
         ResponseEntity<?> response = Exchange(url, request, HttpMethod.POST);
         Action action = new Action();
         action.setEmail(JWTUtils.getEmailFromToken(token));
-        action.setQuery(JSON.toJSONString(request));
+        action.setQuery(request.getQuery());
         action.setType("MODIFY");
         action.setTime(new Date());
         actionService.saveAction(action);

@@ -32,7 +32,9 @@ public class UserActionController {
 
     @RequestMapping(path = "/logs", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> userActions(int num, String email) {
+    public Map<String, Object> userActions(Integer num, String email) {
+        num = new Integer(1000);
+
         Map<String, Object> res = new HashMap<>();
         res.put("logs", actionService.getUserActions(email, num));
         return res;
@@ -49,7 +51,7 @@ public class UserActionController {
 
         Action action = new Action();
         action.setEmail(JWTUtils.getEmailFromToken(token));
-        action.setQuery(JSON.toJSONString(request));
+        action.setQuery(request.getTitle());
         action.setType("ASK_QUESTION");
         action.setTime(new Date());
         actionService.saveAction(action);
@@ -71,7 +73,7 @@ public class UserActionController {
 
         Action action = new Action();
         action.setEmail(JWTUtils.getEmailFromToken(token));
-        action.setQuery(JSON.toJSONString(request));
+        action.setQuery(request.getAnswer());
         action.setType("REPLY_TO_QUESTION");
         action.setTime(new Date());
         actionService.saveAction(action);
@@ -82,11 +84,8 @@ public class UserActionController {
 
     @RequestMapping(path = "/allquestions", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> getAllQuestions(@RequestParam int topk) {
-        Map<String, Object> rs = new HashMap<>();
-        List<Post> questions = postService.getQuestions(topk);
-        rs.put("questions", questions);
-        return rs;
+    public List<Post> getAllQuestions(@RequestParam int pageSize, @RequestParam int pageNum) {
+        return postService.getQuestions(pageSize * pageNum);
     }
 
     @RequestMapping(path = "/questiondetail", method = RequestMethod.GET)
