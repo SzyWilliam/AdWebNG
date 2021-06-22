@@ -8,6 +8,8 @@ urlpatterns = [
     path('', views.index, name='index'),
     # 查询
     path('kg/query', kg.query, name='query'),
+    # 可视化查询
+    path('kg/queryRelation',kg.query_relation, name='queryRelation'),
     # 删除
     path('kg/delete', kg.delete, name='delete'),
     # 修改

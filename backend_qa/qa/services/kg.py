@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseForbidden, HttpResponseBadRequest
+from django.http import HttpResponseBadRequest
 
 from qa.utils.kg_util import KGUtil
 from qa.utils.request_processor import fetch_parameter_dict
@@ -18,6 +18,20 @@ def query(request):
         return generate_response("OK", {"result": "error", "answer": []})
     else:
         return generate_response("OK", answers)
+
+
+def query_relation(request):
+    try:
+        question = request.GET["query"]
+    except KeyError:
+        return HttpResponseBadRequest(generate_response("parameter missing or invalid parameter"))
+
+    kg_util = KGUtil()
+    answers = kg_util.kg_query_relation(question)
+    if not answers:
+        return generate_response("OK", {"result": "error", "answer": []})
+    else:
+        return generate_response("OK", {"result": "ok", "answer": answers})
 
 
 def delete(request):

@@ -31,9 +31,7 @@ def show_info(status_code: int, response_dict: dict):
 
 
 if __name__ == '__main__':
-    status_code, response_dict = kg_query("ccc的多久治好")
+    status_code, response_dict = kg_query("吃胡萝卜治疗什么")
     show_info(status_code, response_dict)
-    status_code, response_dict = kg_new("disease_last_time", "ccc", ["1个月", "2个月"])
-    show_info(status_code, response_dict)
-    status_code, response_dict = kg_query("ccc的多久治好")
-    show_info(status_code, response_dict)
+    # status_code, response_dict = kg_query("心脏病并发症")
+    # show_info(status_code, response_dict)

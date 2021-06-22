@@ -5,13 +5,14 @@ from py2neo import Graph
 
 class SQLRunner:
     def __init__(self):
-        self.g = Graph("http://localhost:7474", auth=("neo4j", "000720"))  # 连接neo4j
+        self.g = Graph("http://34.196.176.30:7474", auth=("neo4j", "000720"))  # 连接neo4j
+        self.g1 = Graph("http://localhost:7474", auth=("neo4j", "000720"))
         self.num_limit = 20
 
     '''执行cypher查询，并返回相应结果'''
 
     def run_sql(self, parser_result, sql_type):
-        if sql_type == "query":
+        if sql_type == "query_small":
             final_answers = []
             for query in parser_result:
                 question_type = query['question_type']
@@ -24,6 +25,23 @@ class SQLRunner:
                 if final_answer:
                     final_answers.append(final_answer)
             return final_answers
+        elif sql_type == "query_big":
+            final_answers = []
+            for query in parser_result:
+                question_type = query['question_type']
+                sqls = query['sql']
+                answers = []
+                for sql in sqls:
+                    result = self.g1.run(sql).data()
+                    answers += result
+                final_answer = self.get_answers(question_type, answers)
+                if final_answer:
+                    final_answers += final_answer
+            return final_answers
+        elif sql_type == "query_relation":
+            sql = "MATCH (m{{name:'{0}'}})-[r]->(n) RETURN r.name, n.name".format(parser_result)
+            result = self.g.run(sql).data()
+            return result
         else:
             t = False
             for query in parser_result:
@@ -202,6 +220,182 @@ class SQLRunner:
             subject = answers[0]['n.name']
             return ['通常可以通过{0}检查出来的疾病有{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit])),
                     "{0}可以检查的疾病有哪些？".format(subject), subject]
+
+        return ""
+
+    def get_answers(self, question_type, answers):
+        if not answers or not any(answers):
+            return []
+        if question_type == 'disease_symptom':
+            desc = [i['n.name'] for i in answers]
+            if desc == [None]:
+                return []
+            else:
+                return desc
+
+        elif question_type == 'symptom_disease':
+            desc = [i['m.name'] for i in answers]
+            if desc == [None]:
+                return []
+            else:
+                return desc
+
+        elif question_type == 'disease_cause':
+            desc = [i['m.cause'] for i in answers]
+            result = []
+            for d in desc:
+                if isinstance(d, list):
+                    result += d
+                else:
+                    result.append(d)
+            if result == [None]:
+                return []
+            else:
+                return result
+
+        elif question_type == 'disease_prevent':
+            desc = [i['m.prevent'] for i in answers]
+            result = []
+            for d in desc:
+                if isinstance(d, list):
+                    result += d
+                else:
+                    result.append(d)
+            if result == [None]:
+                return []
+            else:
+                return result
+
+        elif question_type == 'disease_last_time':
+            desc = [i['m.cure_lasttime'] for i in answers]
+            result = []
+            for d in desc:
+                if isinstance(d, list):
+                    result += d
+                else:
+                    result.append(d)
+            if result == [None]:
+                return []
+            else:
+                return result
+
+        elif question_type == 'disease_cure_way':
+            desc = [i['m.cure_way'] for i in answers]
+            result = []
+            for d in desc:
+                if isinstance(d, list):
+                    result += d
+                else:
+                    result.append(d)
+            if result == [None]:
+                return []
+            else:
+                return result
+
+        elif question_type == 'disease_cure_prob':
+            desc = [i['m.cured_prob'] for i in answers]
+            result = []
+            for d in desc:
+                if isinstance(d, list):
+                    result += d
+                else:
+                    result.append(d)
+            if result == [None]:
+                return []
+            else:
+                return result
+
+        elif question_type == 'disease_easy_get':
+            desc = [i['m.easy_get'] for i in answers]
+            result = []
+            for d in desc:
+                if isinstance(d, list):
+                    result += d
+                else:
+                    result.append(d)
+            if result == [None]:
+                return []
+            else:
+                return result
+
+        elif question_type == 'disease_desc':
+            desc = [i['m.desc'] for i in answers]
+            result = []
+            for d in desc:
+                if isinstance(d, list):
+                    result += d
+                else:
+                    result.append(d)
+            if result == [None]:
+                return []
+            else:
+                return result
+
+        elif question_type == 'disease_accompany':
+            desc1 = [i['n.name'] for i in answers]
+            desc2 = [i['m.name'] for i in answers]
+            subject = answers[0]['m.name']
+            desc = [i for i in desc1 + desc2 if i != subject]
+            if desc == [None]:
+                return []
+            else:
+                return desc
+
+        elif question_type == 'disease_not_food':
+            desc = [i['n.name'] for i in answers]
+            if desc == [None]:
+                return []
+            else:
+                return desc
+
+        elif question_type == 'disease_do_food':
+            desc = [i['n.name'] for i in answers if i['r.name'] == '宜吃' or i['r.name'] == '推荐食谱']
+            if desc == [None]:
+                return []
+            else:
+                return desc
+
+        elif question_type == 'food_not_disease':
+            desc = [i['m.name'] for i in answers]
+            if desc == [None]:
+                return []
+            else:
+                return desc
+
+        elif question_type == 'food_do_disease':
+            desc = [i['m.name'] for i in answers]
+            if desc == [None]:
+                return []
+            else:
+                return desc
+
+        elif question_type == 'disease_drug':
+            desc = [i['n.name'] for i in answers]
+            if desc == [None]:
+                return []
+            else:
+                return desc
+
+        elif question_type == 'drug_disease':
+            desc = [i['m.name'] for i in answers]
+            if desc == [None]:
+                return []
+            else:
+                return desc
+
+        elif question_type == 'disease_check':
+            desc = [i['n.name'] for i in answers]
+            if desc == [None]:
+                return []
+            else:
+                return desc
+
+        elif question_type == 'check_disease':
+            desc = [i['m.name'] for i in answers]
+            if desc == [None]:
+                return []
+            else:
+                return desc
 
         return ""
 

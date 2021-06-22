@@ -2,11 +2,15 @@ package adweb.userservice.controller;
 
 import adweb.userservice.controller.requests.AnswerRequest;
 import adweb.userservice.controller.requests.PostRequest;
+import adweb.userservice.domain.Action;
 import adweb.userservice.domain.Post;
 import adweb.userservice.service.ActionService;
 import adweb.userservice.service.PostService;
+import com.alibaba.fastjson.JSON;
 import org.springframework.web.bind.annotation.*;
+import token.JWTUtils;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,18 +40,26 @@ public class UserActionController {
 
     @RequestMapping(path = "/newquestion", method = RequestMethod.POST)
     @ResponseBody
-    public Post createPost(@RequestBody PostRequest request) {
+    public Post createPost(@RequestBody PostRequest request, @RequestHeader("token") String token) {
         Post post = new Post();
         post.setDetail(request.getDetail());
         post.setTitle(request.getTitle());
         post.setEmail(request.getEmail());
         post.setType("question");
+
+        Action action = new Action();
+        action.setEmail(JWTUtils.getEmailFromToken(token));
+        action.setQuery(JSON.toJSONString(request));
+        action.setType("ASK_QUESTION");
+        action.setTime(new Date());
+        actionService.saveAction(action);
+
         return postService.createPost(post);
     }
 
     @RequestMapping(path = "/reply", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, String> createAnswer(@RequestBody AnswerRequest request) {
+    public Map<String, String> createAnswer(@RequestBody AnswerRequest request,  @RequestHeader("token") String token) {
         Post post = new Post();
         post.setDetail(request.getAnswer());
         post.setType("answer");
@@ -56,6 +68,14 @@ public class UserActionController {
         postService.createPost(post);
         Map<String, String> rs = new HashMap<>();
         rs.put("result", "ok");
+
+        Action action = new Action();
+        action.setEmail(JWTUtils.getEmailFromToken(token));
+        action.setQuery(JSON.toJSONString(request));
+        action.setType("REPLY_TO_QUESTION");
+        action.setTime(new Date());
+        actionService.saveAction(action);
+
         return rs;
     }
 
