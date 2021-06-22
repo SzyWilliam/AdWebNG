@@ -70,6 +70,14 @@ public class KGMiddleController {
         return result;
     }
 
+    @RequestMapping(path = "/queryRelation", method = RequestMethod.GET)
+    public JSONObject query(@RequestParam String query) {
+        String url = basicUrl + "/qa/kg/queryRelation?query=" + query;
+        ResponseEntity<?> response = Exchange(url, null, HttpMethod.GET);
+        return JSONObject.parseObject((String) response.getBody());
+    }
+
+
     @RequestMapping(path = "/new", method = RequestMethod.POST)
     public JSONObject newQuery(@RequestBody NewQueryRequest request, @RequestHeader("token") String token) {
         String url = basicUrl + "/qa/kg/new";
