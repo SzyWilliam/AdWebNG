@@ -26,7 +26,7 @@ http://www.inscourse.top:8999/auth/login
 
 项目充分结合现在的先进技术，采用了前后端分离、后端微服务模式、前端组件化开发的模式，项目的总体架构如下：
 
-![architecture](/Users/william/Desktop/2020/2021/高级web/Project/中期报告/img/architecture.png)
+![architecture](./imgs/architecture.png)
 
 
 
@@ -376,13 +376,111 @@ springcloud后端的文件目录如下
 
 ### Django知识图谱服务目录结构和文件说明（YHT）
 
+<img src="./imgs/django-structure.png" alt="django-structure" style="zoom:70%;" />
 
+核心功能知识图谱的Django实现目录结构如图所示。
+
+services文件夹中的kg.py主要用于对接口与参数进行处理，调用utils进行业务逻辑的实现，并按接口要求组装成响应进行回复。
+
+utils文件夹主要是工具类的实现。request_processor.py/response_generator.py主要是http请求与响应的处理类；kg_util.py是主要的功能实现类，通过调用类中的不同方法可以完成不同功能（这是一个单例模式的类）；question_classifier.py用于对收到的问题进行关键字划分；question_*\_parser.py用于将分好类的关键字转化为相应的Neo4j SQL语句；sql_runner.py用于将SQL语句运行于neo4j中，并进行答案的组装。
+
+data文件夹中的medical.json储存了所有初始的节点及它们的关系，用于初始化neo4j数据库；build_medicalgraph.py用于读取medical.json并将它们存入neo4j中；dict文件夹下的文本文件储存了所有初始关键字。
 
 
 
 ## 关键功能的实现
 
 ### 知识图谱问答、互动的实现（YHT）
+
+知识图谱问答与互动可以抽象成对neo4j数据库的增删改查，因此我将详细介绍问答（查）的部分，其它则比较类似，简单提一些不同点即可。
+
+每次知识图谱互动分为三步，即关键字与问题类型确定（Classify）、SQL语句转换（Parse）与SQL语句执行（Run）。
+
+#### Classify
+
+首先在服务器刚开始运行并实例化kg_util类时，需要对question_classifier进行初始化，通过读取dict文件夹下的文本文件获取所有基础关键字，将它们组合成一个AC自动机（利用pyahocorasick）便于之后的关键字查找，并确定每个关键字对应的实体类型。这是一个比较花时间的过程（大约10秒），因此需要使用单例模式，避免每次查询都需要重新进行这个步骤。
+
+```python
+def build_actree(self, words):
+    actree = ahocorasick.Automaton()
+    for word in words:
+        actree.add_word(word, (self.tree_index, word))
+        self.tree_index += 1
+    actree.make_automaton()
+    return actree
+
+def build_word_type_dict(self):
+    word_type_dict = dict()
+    for word in self.keywords:
+        word_type_dict[word] = []
+        if word in self.disease_wds:
+            word_type_dict[word].append('disease')
+        if word in self.department_wds:
+            word_type_dict[word].append('department')
+        # ...
+    return word_type_dict
+```
+
+同时，question_classifier中还储存了一些次级关键字，用于定位问题类型，比如“原因”、“病因”等词对应疾病原因问题，“方法”、“怎么治疗”等词对应疾病治疗方式问题等等。
+
+收到问题后，分别对这两种关键字进行定位，就能找到问句中的主要实体关键字（比如“心脏病”）及次要问题类型关键字（比如“并发症）。将它们组装并返回。
+
+```python
+def check_keywords(self, question):
+    keywords = []
+    for i in self.keywords_tree.iter(question):
+        word = i[1][1]
+        keywords.append(word)
+    final_dict = {i: self.word_type_dict.get(i) for i in final_wds}
+
+    return final_dict
+```
+
+#### Parse
+
+主要通过多条if语句对应问题类型，并分别将主要实体代入，组装成对应的SQL语句。
+
+```python
+# ...
+elif question_type == 'disease_desc':
+    sql = ["MATCH (m:Disease) where m.name = '{0}' return m.name, m.desc".format(i) for i in keywords]
+
+elif question_type == 'disease_symptom':
+    sql = ["MATCH (m:Disease)-[r:has_symptom]->(n:Symptom) where m.name = '{0}' return m.name, r.name, n.name".format(i) for i in keywords]
+# ...
+```
+
+以疾病简介与疾病症状两种不同类型的问题为例。
+
+疾病简介的存储方式是Disease实体的属性attribute，因此只需通过MATCH命令找到name为实体的Disease，然后获取其desc属性即可。
+
+疾病症状是另一种实体，因此疾病症状的存储方式是关系三元组。通过MATCH命令找到(m)-[r]->(n)，其中m为实体疾病，r为症状关系，所有的n的名字就是我们需要的答案。
+
+#### Run
+
+运行生成的SQL语句，获取答案，并拼装成合理的中文语序，最后返回。
+
+```python
+# ...
+for sql in sqls:
+    result = self.g.run(sql).data()
+    answers += result
+final_answer = self.answer_prettify(question_type, answers)
+# ...
+if question_type == 'disease_symptom':
+    desc = [i['n.name'] for i in answers]
+    if desc == [None]:
+        return ''
+    subject = answers[0]['m.name']
+    return ['{0}的症状包括：{1}'.format(subject, '；'.join(list(set(desc))[:self.num_limit])), '{0}的症状是什么？'.format(subject), subject]
+# ...
+```
+
+以上就是基本查询的过程。
+
+删除与查询基本类似，只要将第二步中的parser修改为question_delete_parser即可。
+
+修改与新增稍微复杂一些，因为可能出现新的实体类型。首先需要在classifier中进行关键字的更新，AC自动机的重构，然后再进行SQL语句的生成，这样下一次对新的关键字进行查询时才能有结果。SQL语句中使用MERGE操作，保证如果本来不存在这个实体就新增，如果本来存在这个实体就获取这个实体，其余的与查询类似。
 
 ### 用户社交问答实现（YH）
 
@@ -425,6 +523,12 @@ springcloud后端的文件目录如下
 
 
 ## 附加功能的实现
+
+### 知识图谱自动更新
+
+主要实现方式是在后端部署时同时开启两个Neo4j图数据库，其中一个存放所有的大量数据，作为网络环境的模拟，另一个则存放少量数据，作为本地数据库。每次查询时，首先查询本地数据库，如果本地数据库中没有数据，则先返回error，然后去模拟网络的大数据库中查询。如果查到对应答案则插入本地数据库中，这样下次用户查询相同问题时，不需要用户本身提交答案的更新即可获取答案，模拟一个知识图谱的自动更新过程。
+
+其余的增、删、改都直接在本地数据库中进行操作。
 
 ### 知识图谱可视化的功能实现
 
@@ -489,7 +593,34 @@ $ docker run -d --net=host user-service
 
 ### Django和Neo4j部署配置（YHT）
 
+Django和Neo4j部署在自己租赁的阿里云服务器中。
 
+首先要进行Neo4j的安装。将Neo4j和JDK11的安装包传到服务器，解压缩，并将JAVA的目录加入环境变量中。
+
+```shell
+export JAVA_HOME=/usr/lib/jvm/jdk-11.0.11
+export JRE_HOME=${JAVA_HOME}/jre
+export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib
+export PATH=${JAVA_HOME}/bin:$PATH
+```
+
+然后进入Neo4j的安装目录，修改密码，并使用
+
+```sh
+nohup ./neo4j start &
+```
+
+使其在后台不挂起地运行。
+
+然后将知识图谱代码传到服务器，使用pip3安装Django和相应模块，并使用
+
+```sh
+nohup python3 manage.py runserver 0.0.0.0 &
+```
+
+运行Django服务器，使其接收来自任意终端的访问，并不挂起的运行。
+
+这样知识图谱部分就部署完毕了。
 
 ## 团队分工（SZY）
 
